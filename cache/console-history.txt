@@ -1,0 +1,25 @@
+const { ethers } = hre;
+const hre = await import("hardhat");
+console.log("✅ Contract deployed to:", await charityTracker.getAddress());
+await charityTracker.waitForDeployment();
+const charityTracker = await CharityTracker.deploy();
+const CharityTracker = await ethers.getContractFactory("CharityTracker");
+console.log("Deploying with account:", deployer.address);
+const [deployer] = await ethers.getSigners();
+const { ethers } = hre;
+const hre = await import("hardhat");
+console.log("✅ Contract deployed to:", await charityTracker.getAddress());
+await charityTracker.waitForDeployment();
+const charityTracker = await CharityTracker.deploy();
+const CharityTracker = await ethers.getContractFactory("CharityTracker");
+console.log("Deploying with account:", deployer.address);
+const [deployer] = await ethers.getSigners();
+const { ethers } = await import("hardhat");
+console.log("✅ Contract deployed to:", await charityTracker.getAddress());
+await charityTracker.waitForDeployment();
+const charityTracker = await CharityTracker.deploy();
+const CharityTracker = await ethers.getContractFactory("CharityTracker");
+console.log("Deploying with account:", deployer.address);
+const [deployer] = await ethers.getSigners();
+(await ethers.getSigners())[0].address
+(await ethers.getSigners())[0].getAddress()thers.getSigners())[0].getAddress()
