@@ -58,19 +58,19 @@ export default function HomePage({ setCurrentPage }) {
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8 text-center">
             <div>
-              <div className="text-4xl font-bold text-blue-600 mb-2">$2.5M+</div>
+              <div className="text-4xl font-bold text-blue-600 mb-2">0.0 ETH</div>
               <div className="text-gray-600">Donated</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-blue-600 mb-2">150+</div>
+              <div className="text-4xl font-bold text-blue-600 mb-2">3+</div>
               <div className="text-gray-600">Active Campaigns</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-blue-600 mb-2">50+</div>
+              <div className="text-4xl font-bold text-blue-600 mb-2">1+</div>
               <div className="text-gray-600">Verified NGOs</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-blue-600 mb-2">10K+</div>
+              <div className="text-4xl font-bold text-blue-600 mb-2">2+</div>
               <div className="text-gray-600">Donors</div>
             </div>
           </div>
@@ -85,7 +85,7 @@ export default function HomePage({ setCurrentPage }) {
               Why Choose CharityChain?
             </h3>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Revolutionary blockchain technology meets traditional charitable giving
+              Blockchain technology meets traditional charitable giving
             </p>
           </div>
 
@@ -178,7 +178,7 @@ export default function HomePage({ setCurrentPage }) {
             Ready to Make a Difference?
           </h3>
           <p className="text-xl text-blue-100 mb-8">
-            Join thousands of donors who trust CharityChain for transparent, impactful giving
+            Join us on CharityChain
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
@@ -201,8 +201,8 @@ export default function HomePage({ setCurrentPage }) {
       <div className="py-20">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h3 className="text-4xl font-bold text-gray-900 mb-4">What People Say</h3>
-            <p className="text-xl text-gray-600">Real stories from our community</p>
+            <h3 className="text-4xl font-bold text-gray-900 mb-4">0+</h3>
+            <p className="text-xl text-gray-600">Lives impacted so far</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -215,10 +215,10 @@ export default function HomePage({ setCurrentPage }) {
                 ))}
               </div>
               <p className="text-gray-700 mb-4">
-                "Finally, a platform where I can see exactly where my donations go. The blockchain transparency gives me complete peace of mind."
+                Contribute for a cause of your choice 
               </p>
-              <div className="font-medium text-gray-900">Sarah Johnson</div>
-              <div className="text-sm text-gray-600">Regular Donor</div>
+              <div className="font-medium text-gray-900">Clean water initative</div>
+              <div className="text-sm text-gray-600">ABC</div>
             </div>
 
             <div className="bg-white p-8 rounded-xl shadow-md border border-gray-100">
@@ -230,10 +230,10 @@ export default function HomePage({ setCurrentPage }) {
                 ))}
               </div>
               <p className="text-gray-700 mb-4">
-                "CharityChain has revolutionized how we fundraise. Donors trust us more because they can verify everything on the blockchain."
+                Change lives: support someone's education today
               </p>
-              <div className="font-medium text-gray-900">Michael Chen</div>
-              <div className="text-sm text-gray-600">NGO Director</div>
+              <div className="font-medium text-gray-900">Education for the underprivileged</div>
+              <div className="text-sm text-gray-600">ABC</div>
             </div>
 
             <div className="bg-white p-8 rounded-xl shadow-md border border-gray-100">
@@ -245,10 +245,10 @@ export default function HomePage({ setCurrentPage }) {
                 ))}
               </div>
               <p className="text-gray-700 mb-4">
-                "The real-time updates and progress tracking make giving so much more meaningful. I feel connected to the causes I support."
+                Protect the voiceless
               </p>
-              <div className="font-medium text-gray-900">Emily Rodriguez</div>
-              <div className="text-sm text-gray-600">First-time Donor</div>
+              <div className="font-medium text-gray-900">Local Animal Shelter</div>
+              <div className="text-sm text-gray-600">ABC</div>
             </div>
           </div>
         </div>
