@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import { useState, useEffect } from 'react';
 
 export default function CampaignDetails({ campaign, user, setCurrentPage }) {
@@ -52,7 +53,7 @@ export default function CampaignDetails({ campaign, user, setCurrentPage }) {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/donations', {
+      const response = await fetch(`${API_URL}/api/donations', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -14,6 +14,7 @@ import CreateCampaign from './pages/CreateCampaign';
 import EditCampaign from './pages/EditCampaign';
 import ProfilePage from './pages/ProfilePage';
 import NotFoundPage from './pages/NotFoundPage';
+import ForgotPassword from './pages/ForgotPassword';
 
 function App() {
   // Authentication state
@@ -102,7 +103,9 @@ function App() {
 
   if (currentPage === 'ngo-registration') {
     return <NGORegistration setCurrentPage={setCurrentPage} />;
-  }
+  }if (currentPage === 'forgot-password') {
+  return <ForgotPassword setCurrentPage={setCurrentPage} />;
+}
 
   // Campaigns page (accessible to all, but with different features for logged-in users)
   if (currentPage === 'campaigns') {

@@ -2,7 +2,19 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 const User = require('../models/User');
+
+// Email transporter configuration
+const transporter = nodemailer.createTransport({
+  host: process.env.EMAIL_HOST,
+  port: process.env.EMAIL_PORT,
+  secure: false,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD
+  }
+});
 
 // Middleware to verify JWT token
 const auth = async (req, res, next) => {
@@ -27,6 +39,11 @@ const auth = async (req, res, next) => {
   }
 };
 
+// Generate 6-digit OTP
+const generateOTP = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+};
+
 // @route   POST /api/auth/register
 // @desc    Register a new user (donor)
 // @access  Public
@@ -34,33 +51,28 @@ router.post('/register', async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
 
-    // Validation
     if (!name || !email || !password) {
       return res.status(400).json({ message: 'Please provide all required fields' });
     }
 
-    // Check if user already exists
     const existingUser = await User.findOne({ email: email.toLowerCase() });
     if (existingUser) {
       return res.status(400).json({ message: 'User with this email already exists' });
     }
 
-    // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create user
     const user = new User({
       name,
       email: email.toLowerCase(),
       password: hashedPassword,
       role: role || 'donor',
-      verified: role === 'donor' ? true : false // Auto-verify donors, NGOs need admin approval
+      verified: role === 'donor' ? true : false
     });
 
     await user.save();
 
-    // Create JWT token
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
@@ -100,22 +112,18 @@ router.post('/register-ngo', async (req, res) => {
       description 
     } = req.body;
 
-    // Validation
     if (!name || !email || !password || !registrationNumber || !contactNumber || !description) {
       return res.status(400).json({ message: 'Please provide all required fields' });
     }
 
-    // Check if user already exists
     const existingUser = await User.findOne({ email: email.toLowerCase() });
     if (existingUser) {
       return res.status(400).json({ message: 'User with this email already exists' });
     }
 
-    // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create NGO user
     const user = new User({
       name,
       email: email.toLowerCase(),
@@ -126,7 +134,7 @@ router.post('/register-ngo', async (req, res) => {
       website,
       address,
       description,
-      verified: false // NGOs need admin verification
+      verified: false
     });
 
     await user.save();
@@ -154,31 +162,26 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Validation
     if (!email || !password) {
       return res.status(400).json({ message: 'Please provide email and password' });
     }
 
-    // Check if user exists
     const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Check password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Check if NGO is verified
     if (user.role === 'ngo' && !user.verified) {
       return res.status(403).json({ 
         message: 'Your NGO account is pending verification. Please wait for admin approval.' 
       });
     }
 
-    // Create JWT token
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
@@ -207,6 +210,153 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// @route   POST /api/auth/forgot-password
+// @desc    Send OTP to email for password reset
+// @access  Public
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: 'Please provide email address' });
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!user) {
+      return res.status(404).json({ message: 'No account found with this email address' });
+    }
+
+    // Generate OTP
+    const otp = generateOTP();
+    
+    // Save OTP to user (expires in 10 minutes)
+    user.resetOTP = otp;
+    user.resetOTPExpiry = Date.now() + 10 * 60 * 1000; // 10 minutes
+    await user.save();
+
+    // Send email
+    const mailOptions = {
+      from: process.env.EMAIL_FROM,
+      to: user.email,
+      subject: 'CharityChain - Password Reset OTP',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #2563eb;">Password Reset Request</h2>
+          <p>Hello ${user.name},</p>
+          <p>You requested to reset your password. Use the following OTP to reset your password:</p>
+          <div style="background-color: #f3f4f6; padding: 20px; text-align: center; margin: 20px 0;">
+            <h1 style="color: #2563eb; letter-spacing: 5px; margin: 0;">${otp}</h1>
+          </div>
+          <p>This OTP is valid for 10 minutes.</p>
+          <p>If you didn't request this, please ignore this email.</p>
+          <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;">
+          <p style="color: #6b7280; font-size: 12px;">CharityChain - Transparent Charity Through Blockchain</p>
+        </div>
+      `
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.json({ 
+      message: 'OTP sent to your email address',
+      email: user.email
+    });
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({ message: 'Error sending OTP. Please try again.' });
+  }
+});
+
+// @route   POST /api/auth/verify-otp
+// @desc    Verify OTP
+// @access  Public
+router.post('/verify-otp', async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    if (!email || !otp) {
+      return res.status(400).json({ message: 'Please provide email and OTP' });
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (!user.resetOTP || !user.resetOTPExpiry) {
+      return res.status(400).json({ message: 'No OTP request found. Please request a new OTP.' });
+    }
+
+    if (Date.now() > user.resetOTPExpiry) {
+      user.resetOTP = null;
+      user.resetOTPExpiry = null;
+      await user.save();
+      return res.status(400).json({ message: 'OTP has expired. Please request a new one.' });
+    }
+
+    if (user.resetOTP !== otp) {
+      return res.status(400).json({ message: 'Invalid OTP' });
+    }
+
+    res.json({ message: 'OTP verified successfully' });
+  } catch (error) {
+    console.error('Verify OTP error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// @route   POST /api/auth/reset-password
+// @desc    Reset password with OTP
+// @access  Public
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({ message: 'Please provide email, OTP, and new password' });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: 'Password must be at least 6 characters' });
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (!user.resetOTP || !user.resetOTPExpiry) {
+      return res.status(400).json({ message: 'No OTP request found' });
+    }
+
+    if (Date.now() > user.resetOTPExpiry) {
+      user.resetOTP = null;
+      user.resetOTPExpiry = null;
+      await user.save();
+      return res.status(400).json({ message: 'OTP has expired' });
+    }
+
+    if (user.resetOTP !== otp) {
+      return res.status(400).json({ message: 'Invalid OTP' });
+    }
+
+    // Hash new password
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    
+    // Clear OTP fields
+    user.resetOTP = null;
+    user.resetOTPExpiry = null;
+    
+    await user.save();
+
+    res.json({ message: 'Password reset successful. You can now login with your new password.' });
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // @route   GET /api/auth/verify
 // @desc    Verify JWT token and return user
 // @access  Private
@@ -232,5 +382,4 @@ router.get('/verify', auth, async (req, res) => {
   }
 });
 
-// Export both router and auth middleware
 module.exports = { router, auth };

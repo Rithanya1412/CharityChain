@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import { useState } from 'react';
 
 export default function LoginPage({ setUser, setUserRole, setCurrentPage }) {
@@ -167,9 +168,19 @@ export default function LoginPage({ setUser, setUserRole, setCurrentPage }) {
             className="text-blue-600 font-medium hover:underline"
           >
             {isLogin ? 'Sign Up' : 'Login'}
+            // Add this after the login/signup toggle at the bottom
+<div className="mt-4 text-center">
+  <button
+    onClick={() => setCurrentPage('forgot-password')}
+    className="text-sm text-blue-600 hover:underline"
+  >
+    Forgot Password?
+  </button>
+</div>
           </button>
         </p>
       </div>
     </div>
+    
   );
 }

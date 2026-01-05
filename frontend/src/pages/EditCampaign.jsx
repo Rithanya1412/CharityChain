@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import { useState, useEffect } from 'react';
 
 export default function EditCampaign({ campaign, setCurrentPage }) {

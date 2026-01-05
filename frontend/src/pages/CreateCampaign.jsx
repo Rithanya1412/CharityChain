@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import { useState } from 'react';
 
 export default function CreateCampaign({ user, setCurrentPage }) {
@@ -80,7 +81,7 @@ export default function CreateCampaign({ user, setCurrentPage }) {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/campaigns', {
+      const response = await fetch(`${API_URL}/api/campaigns', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

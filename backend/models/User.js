@@ -26,10 +26,19 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  // OTP fields for password reset
+  resetOTP: {
+    type: String,
+    default: null
+  },
+  resetOTPExpiry: {
+    type: Date,
+    default: null
+  },
   // NGO-specific fields
   registrationNumber: {
     type: String,
-    sparse: true // Allows null values but ensures uniqueness when present
+    sparse: true
   },
   contactNumber: {
     type: String

@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 export default function AboutPage({ setCurrentPage }) {
   return (
     <div className="min-h-screen bg-gray-50">

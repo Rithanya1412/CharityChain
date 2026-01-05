@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import { useState, useEffect } from 'react';
 
 export default function CampaignsPage({ user, setCurrentPage, setSelectedCampaign }) {
@@ -20,7 +21,7 @@ export default function CampaignsPage({ user, setCurrentPage, setSelectedCampaig
   const fetchCampaigns = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/campaigns');
+      const response = await fetch(`${API_URL}/api/campaigns');
       const data = await response.json();
       setCampaigns(data);
       setFilteredCampaigns(data);

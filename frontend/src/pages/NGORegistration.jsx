@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import { useState } from 'react';
 
 export default function NGORegistration({ setCurrentPage }) {
@@ -67,7 +68,7 @@ export default function NGORegistration({ setCurrentPage }) {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/register-ngo', {
+      const response = await fetch(`${API_URL}/api/auth/register-ngo', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

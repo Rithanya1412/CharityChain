@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import { useState, useEffect } from 'react';
 
 export default function DonorDashboard({ user, setUser, setUserRole, setCurrentPage, setSelectedCampaign }) {
@@ -20,10 +21,10 @@ export default function DonorDashboard({ user, setUser, setUserRole, setCurrentP
       const token = localStorage.getItem('token');
       
       const [donationsRes, statsRes] = await Promise.all([
-        fetch('http://localhost:5000/api/donations/my-donations', {
+        fetch(`${API_URL}/api/donations/my-donations', {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch('http://localhost:5000/api/donations/stats', {
+        fetch(`${API_URL}/api/donations/stats', {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);

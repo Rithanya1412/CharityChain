@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 export default function HomePage({ setCurrentPage }) {
   return (
     <div className="min-h-screen bg-white">

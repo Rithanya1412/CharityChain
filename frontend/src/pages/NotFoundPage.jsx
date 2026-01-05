@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 export default function NotFoundPage({ setCurrentPage, user, userRole }) {
   const getDashboardPage = () => {
     if (!user) return 'home';

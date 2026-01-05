@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import { useState, useEffect } from 'react';
 
 export default function AdminDashboard({ user, setUser, setUserRole }) {
@@ -22,13 +23,13 @@ export default function AdminDashboard({ user, setUser, setUserRole }) {
       const token = localStorage.getItem('token');
       
       const [ngosRes, campaignsRes, statsRes] = await Promise.all([
-        fetch('http://localhost:5000/api/admin/ngos', {
+        fetch(`${API_URL}/api/admin/ngos', {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch('http://localhost:5000/api/admin/campaigns', {
+        fetch(`${API_URL}/api/admin/campaigns', {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch('http://localhost:5000/api/admin/stats', {
+        fetch(`${API_URL}/api/admin/stats', {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);

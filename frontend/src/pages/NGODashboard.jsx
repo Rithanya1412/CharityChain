@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import { useState, useEffect } from 'react';
 
 export default function NGODashboard({ user, setUser, setUserRole, setCurrentPage, setEditingCampaign }) {
@@ -20,10 +21,10 @@ export default function NGODashboard({ user, setUser, setUserRole, setCurrentPag
       const token = localStorage.getItem('token');
       
       const [campaignsRes, statsRes] = await Promise.all([
-        fetch('http://localhost:5000/api/campaigns/my-campaigns', {
+        fetch(`${API_URL}/api/campaigns/my-campaigns', {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch('http://localhost:5000/api/ngo/stats', {
+        fetch(`${API_URL}/api/ngo/stats', {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);
