@@ -57,7 +57,7 @@ export default function ProfilePage({ user, setUser, userRole, setCurrentPage })
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${API_URL}/api/user/profile', {
+      const response = await fetch(`${API_URL}/api/user/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -107,7 +107,7 @@ export default function ProfilePage({ user, setUser, userRole, setCurrentPage })
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${API_URL}/api/user/change-password', {
+      const response = await fetch(`${API_URL}/api/user/change-password`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

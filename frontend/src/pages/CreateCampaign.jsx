@@ -81,7 +81,7 @@ export default function CreateCampaign({ user, setCurrentPage }) {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${API_URL}/api/campaigns', {
+      const response = await fetch(`${API_URL}/api/campaigns`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

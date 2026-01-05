@@ -23,15 +23,16 @@ export default function AdminDashboard({ user, setUser, setUserRole }) {
       const token = localStorage.getItem('token');
       
       const [ngosRes, campaignsRes, statsRes] = await Promise.all([
-        fetch(`${API_URL}/api/admin/ngos', {
+        fetch(`${API_URL}/api/admin/ngos`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch(`${API_URL}/api/admin/campaigns', {
+        fetch(`${API_URL}/api/admin/campaigns`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch(`${API_URL}/api/admin/stats', {
+    
+        fetch(`${API_URL}/api/admin/stats`, {
           headers: { 'Authorization': `Bearer ${token}` }
-        })
+        }),
       ]);
 
       const ngosData = await ngosRes.json();

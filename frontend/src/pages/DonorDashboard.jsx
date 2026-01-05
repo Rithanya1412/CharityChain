@@ -21,10 +21,10 @@ export default function DonorDashboard({ user, setUser, setUserRole, setCurrentP
       const token = localStorage.getItem('token');
       
       const [donationsRes, statsRes] = await Promise.all([
-        fetch(`${API_URL}/api/donations/my-donations', {
+        fetch(`${API_URL}/api/donations/my-donations`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch(`${API_URL}/api/donations/stats', {
+        fetch(`${API_URL}/api/donations/stats`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);

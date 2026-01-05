@@ -31,17 +31,19 @@ export default function AboutPage({ setCurrentPage }) {
       <div className="max-w-7xl mx-auto px-4 py-16">
         {/* Mission Section */}
         <section className="mb-16">
-          <h3 className="text-3xl font-bold text-gray-900 mb-6 text-center">Our Mission</h3>
+          <h3 className="text-3xl font-bold text-gray-900 mb-6 text-center">About CharityChain</h3>
           <p className="text-lg text-gray-700 max-w-4xl mx-auto text-center leading-relaxed">
             CharityChain aims to restore trust in charitable giving by providing complete transparency 
             through blockchain technology. Every donation is recorded on an immutable ledger, ensuring 
             that your contributions reach their intended destination and make a real impact.
           </p>
         </section>
-
+<br>
+</br>
         {/* Features Grid */}
         <section className="mb-16">
           <h3 className="text-3xl font-bold text-gray-900 mb-10 text-center">Why CharityChain?</h3>
+          <br></br>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition">
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
@@ -83,6 +85,7 @@ export default function AboutPage({ setCurrentPage }) {
             </div>
           </div>
         </section>
+        <br></br>
 
         {/* How It Works */}
         <section className="mb-16 bg-white rounded-2xl p-10 shadow-lg">
@@ -128,26 +131,26 @@ export default function AboutPage({ setCurrentPage }) {
             </div>
           </div>
         </section>
-
+<br></br>
         {/* Stats Section */}
         <section className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-10 text-white mb-16">
-          <h3 className="text-3xl font-bold mb-10 text-center">Our Impact</h3>
+          <h3 className="text-3xl font-bold mb-10 text-center">Stats so far...</h3>
           <div className="grid md:grid-cols-3 gap-8 text-center">
             <div>
-              <div className="text-4xl font-bold mb-2">$2.5M+</div>
+              <div className="text-4xl font-bold mb-2">0.0 ETH</div>
               <div className="text-blue-100">Total Donations</div>
             </div>
             <div>
-              <div className="text-4xl font-bold mb-2">150+</div>
+              <div className="text-4xl font-bold mb-2">3+</div>
               <div className="text-blue-100">Active Campaigns</div>
             </div>
             <div>
-              <div className="text-4xl font-bold mb-2">50+</div>
+              <div className="text-4xl font-bold mb-2">1+</div>
               <div className="text-blue-100">Verified NGOs</div>
             </div>
           </div>
         </section>
-
+<br></br>
         {/* Call to Action */}
         <section className="text-center">
           <h3 className="text-3xl font-bold text-gray-900 mb-6">Ready to Make a Difference?</h3>

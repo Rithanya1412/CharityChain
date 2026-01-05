@@ -21,7 +21,7 @@ export default function CampaignsPage({ user, setCurrentPage, setSelectedCampaig
   const fetchCampaigns = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/api/campaigns');
+      const response = await fetch(`${API_URL}/api/campaigns`);
       const data = await response.json();
       setCampaigns(data);
       setFilteredCampaigns(data);

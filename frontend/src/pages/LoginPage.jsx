@@ -168,7 +168,7 @@ export default function LoginPage({ setUser, setUserRole, setCurrentPage }) {
             className="text-blue-600 font-medium hover:underline"
           >
             {isLogin ? 'Sign Up' : 'Login'}
-            // Add this after the login/signup toggle at the bottom
+<br></br>
 <div className="mt-4 text-center">
   <button
     onClick={() => setCurrentPage('forgot-password')}

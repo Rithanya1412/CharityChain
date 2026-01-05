@@ -53,7 +53,7 @@ export default function CampaignDetails({ campaign, user, setCurrentPage }) {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${API_URL}/api/donations', {
+      const response = await fetch(`${API_URL}/api/donations`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -27,9 +27,11 @@ export default function HomePage({ setCurrentPage }) {
       <div className="bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800 text-white">
         <div className="max-w-7xl mx-auto px-4 py-24">
           <div className="max-w-3xl">
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+            <h5 className="text-5xl md:text-6xl font-bold mb-6 leading-tight"> <center>
               Transparent Charity Through Blockchain
-            </h2>
+            </center>
+              
+            </h5>
             <p className="text-xl md:text-2xl text-blue-100 mb-8 leading-relaxed">
               Every donation tracked. Every impact verified. Trust restored through technology.
             </p>

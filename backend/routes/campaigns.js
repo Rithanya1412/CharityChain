@@ -218,5 +218,33 @@ router.get('/:id/donations', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+// @route   GET /api/campaigns/public-stats
+// @desc    Get public statistics for homepage
+// @access  Public
+router.get('/public-stats', async (req, res) => {
+  try {
+    const Donation = require('../models/Donation');
+    const User = require('../models/User');
+
+    const [donations, campaigns, ngos, donors] = await Promise.all([
+      Donation.find({ status: 'completed' }),
+      Campaign.find({ status: 'active' }),
+      User.find({ role: 'ngo', verified: true }),
+      Donation.distinct('donor')
+    ]);
+
+    const totalDonated = donations.reduce((sum, donation) => sum + donation.amount, 0);
+
+    res.json({
+      totalDonated,
+      activeCampaigns: campaigns.length,
+      verifiedNGOs: ngos.length,
+      totalDonors: donors.length
+    });
+  } catch (error) {
+    console.error('Get public stats error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 module.exports = router;

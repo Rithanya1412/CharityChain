@@ -17,15 +17,15 @@ files.forEach(file => {
     // Replace all fetch URLs
     content = content.replace(
       /fetch\(['"]http:\/\/localhost:5000/g,
-      "fetch(`${API_URL}"
+      "fetch(`${API_URL`}"
     );
     content = content.replace(
       /fetch\("http:\/\/localhost:5000/g,
-      'fetch(`${API_URL}'
+      'fetch(`${API_URL`}'
     );
     content = content.replace(
       /fetch\('http:\/\/localhost:5000/g,
-      'fetch(`${API_URL}'
+      'fetch(`${API_URL`}'
     );
     
     fs.writeFileSync(filePath, content);

@@ -68,7 +68,7 @@ export default function NGORegistration({ setCurrentPage }) {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/api/auth/register-ngo', {
+      const response = await fetch(`${API_URL}/api/auth/register-ngo`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
