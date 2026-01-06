@@ -1,5 +1,5 @@
-import { API_URL } from '../config';
 import { useState } from 'react';
+import { API_URL } from '../config';
 
 export default function LoginPage({ setUser, setUserRole, setCurrentPage }) {
   const [isLogin, setIsLogin] = useState(true);
@@ -19,7 +19,7 @@ export default function LoginPage({ setUser, setUserRole, setCurrentPage }) {
 
     try {
       const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
-      const response = await fetch(`http://localhost:5000${endpoint}`, {
+      const response = await fetch(`${API_URL}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -161,26 +161,27 @@ export default function LoginPage({ setUser, setUserRole, setCurrentPage }) {
           </button>
         </div>
 
-        <p className="text-center text-sm text-gray-600 mt-6">
-          {isLogin ? "Don't have an account? " : "Already have an account? "}
-          <button
-            onClick={() => setIsLogin(!isLogin)}
-            className="text-blue-600 font-medium hover:underline"
-          >
-            {isLogin ? 'Sign Up' : 'Login'}
-<br></br>
-<div className="mt-4 text-center">
-  <button
-    onClick={() => setCurrentPage('forgot-password')}
-    className="text-sm text-blue-600 hover:underline"
-  >
-    Forgot Password?
-  </button>
-</div>
-          </button>
-        </p>
+        <div className="mt-6 text-center space-y-2">
+          <p className="text-sm text-gray-600">
+            {isLogin ? "Don't have an account? " : "Already have an account? "}
+            <button
+              onClick={() => setIsLogin(!isLogin)}
+              className="text-blue-600 font-medium hover:underline"
+            >
+              {isLogin ? 'Sign Up' : 'Login'}
+            </button>
+          </p>
+          
+          {isLogin && (
+            <button
+              onClick={() => setCurrentPage('forgot-password')}
+              className="text-sm text-blue-600 hover:underline"
+            >
+              Forgot Password?
+            </button>
+          )}
+        </div>
       </div>
     </div>
-    
   );
 }
