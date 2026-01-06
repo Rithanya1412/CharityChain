@@ -9,28 +9,47 @@ files.forEach(file => {
     const filePath = path.join(pagesDir, file);
     let content = fs.readFileSync(filePath, 'utf8');
     
-    // Add import at top if not exists
-    if (!content.includes('import { API_URL }')) {
-      content = `import { API_URL } from '../config';\n` + content;
+    // Skip if already has API_URL import
+    if (content.includes('import { API_URL }')) {
+      console.log(`✓ ${file} already updated`);
+      return;
     }
+    
+    // Check if file has fetch calls
+    if (!content.includes("fetch('http://localhost:5000") && 
+        !content.includes('fetch("http://localhost:5000') &&
+        !content.includes('fetch(`http://localhost:5000')) {
+      console.log(`- ${file} has no fetch calls, skipping`);
+      return;
+    }
+    
+    // Add import at top (after existing imports)
+    const lines = content.split('\n');
+    let insertIndex = 0;
+    
+    // Find last import statement
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].trim().startsWith('import ')) {
+        insertIndex = i + 1;
+      }
+    }
+    
+    lines.splice(insertIndex, 0, "import { API_URL } from '../config';");
+    content = lines.join('\n');
     
     // Replace all fetch URLs
     content = content.replace(
       /fetch\(['"]http:\/\/localhost:5000/g,
-      "fetch(`${API_URL`}"
+      "fetch(`${API_URL}"
     );
     content = content.replace(
-      /fetch\("http:\/\/localhost:5000/g,
-      'fetch(`${API_URL`}'
-    );
-    content = content.replace(
-      /fetch\('http:\/\/localhost:5000/g,
-      'fetch(`${API_URL`}'
+      /fetch\(`http:\/\/localhost:5000/g,
+      'fetch(`${API_URL}'
     );
     
     fs.writeFileSync(filePath, content);
-    console.log(`Updated: ${file}`);
+    console.log(`✓ Updated: ${file}`);
   }
 });
 
-console.log('All files updated!');
+console.log('\n✅ All files updated! Now restart your dev server.');
