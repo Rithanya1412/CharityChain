@@ -23,10 +23,10 @@ export default function CampaignDetails({ campaign, user, setCurrentPage }) {
     try {
       const token = localStorage.getItem('token');
       const [donationsRes, updatesRes] = await Promise.all([
-        fetch(`http://localhost:5000/api/campaigns/${campaign._id}/donations`, {
+        fetch(`http://localhost:5173/api/campaigns/${campaign._id}/donations`, {
           headers: token ? { 'Authorization': `Bearer ${token}` } : {}
         }),
-        fetch(`http://localhost:5000/api/campaigns/${campaign._id}/updates`, {
+        fetch(`http://localhost:5173/api/campaigns/${campaign._id}/updates`, {
           headers: token ? { 'Authorization': `Bearer ${token}` } : {}
         })
       ]);

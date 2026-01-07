@@ -16,9 +16,9 @@ files.forEach(file => {
     }
     
     // Check if file has fetch calls
-    if (!content.includes("fetch('http://localhost:5000") && 
-        !content.includes('fetch("http://localhost:5000') &&
-        !content.includes('fetch(`http://localhost:5000')) {
+    if (!content.includes("fetch('http://localhost:5173") && 
+        !content.includes('fetch("http://localhost:5173') &&
+        !content.includes('fetch(`http://localhost:5173')) {
       console.log(`- ${file} has no fetch calls, skipping`);
       return;
     }
@@ -34,18 +34,12 @@ files.forEach(file => {
       }
     }
     
-    lines.splice(insertIndex, 0, "import { API_URL } from '../config';");
+    lines.splice(insertIndex, 0, "import { API_URL } from './config';");
     content = lines.join('\n');
     
     // Replace all fetch URLs
-    content = content.replace(
-      /fetch\(['"]http:\/\/localhost:5000/g,
-      "fetch(`${API_URL}"
-    );
-    content = content.replace(
-      /fetch\(`http:\/\/localhost:5000/g,
-      'fetch(`${API_URL}'
-    );
+    content = "fetch(`${API_URL}";
+    content ='fetch(`${API_URL}';
     
     fs.writeFileSync(filePath, content);
     console.log(`✓ Updated: ${file}`);

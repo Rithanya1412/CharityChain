@@ -15,6 +15,7 @@ import EditCampaign from './pages/EditCampaign';
 import ProfilePage from './pages/ProfilePage';
 import NotFoundPage from './pages/NotFoundPage';
 import ForgotPassword from './pages/ForgotPassword';
+import './index.css';
 
 function App() {
   // Authentication state

@@ -1,1 +1,1 @@
-export const API_URL = 'https://charity-chain-xi.vercel.app'|| 'http://localhost:5000';
+export const API_URL = 'https://charity-chain-xi.vercel.app'|| 'http://localhost:5173';

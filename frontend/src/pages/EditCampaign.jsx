@@ -95,7 +95,7 @@ export default function EditCampaign({ campaign, setCurrentPage }) {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/campaigns/${campaign._id}`, {
+      const response = await fetch(`http://localhost:5173/api/campaigns/${campaign._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -142,7 +142,7 @@ export default function EditCampaign({ campaign, setCurrentPage }) {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/campaigns/${campaign._id}/updates`, {
+      const response = await fetch(`http://localhost:5173/api/campaigns/${campaign._id}/updates`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

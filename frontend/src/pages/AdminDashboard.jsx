@@ -52,7 +52,7 @@ export default function AdminDashboard({ user, setUser, setUserRole }) {
   const handleVerifyNGO = async (ngoId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/verify-ngo/${ngoId}`, {
+      const response = await fetch(`http://localhost:5173/api/admin/verify-ngo/${ngoId}`, {
         method: 'PUT',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -68,7 +68,7 @@ export default function AdminDashboard({ user, setUser, setUserRole }) {
   const handleRejectNGO = async (ngoId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/reject-ngo/${ngoId}`, {
+      const response = await fetch(`http://localhost:5173/api/admin/reject-ngo/${ngoId}`, {
         method: 'PUT',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -84,7 +84,7 @@ export default function AdminDashboard({ user, setUser, setUserRole }) {
   const handleSuspendCampaign = async (campaignId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/suspend-campaign/${campaignId}`, {
+      const response = await fetch(`http://localhost:5173/api/admin/suspend-campaign/${campaignId}`, {
         method: 'PUT',
         headers: { 'Authorization': `Bearer ${token}` }
       });

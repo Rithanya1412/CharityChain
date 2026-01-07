@@ -1,301 +1,140 @@
-import { API_URL } from '../config';
+import { useState, useEffect } from 'react';
 export default function HomePage({ setCurrentPage }) {
+  const [stats, setStats] = useState({
+    totalDonated: 0,
+    activeCampaigns: 0,
+    verifiedNGOs: 0,
+    totalDonors: 0
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchStats();
+    const interval = setInterval(fetchStats, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const fetchStats = async () => {
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5173';
+      const response = await fetch(`${API_URL}/api/campaigns/public-stats`);
+      if (response.ok) {
+        const data = await response.json();
+        setStats(data);
+      }
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatNumber = (num) => {
+    if (num >= 1000000) {
+      return `${(num / 1000000).toFixed(1)}M`;
+    } else if (num >= 1000) {
+      return `${(num / 1000).toFixed(1)}K`;
+    }
+    return num.toString();
+  };
+
   return (
-    <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="bg-white shadow-sm sticky top-0 z-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      {/* Header */}
+      <header>
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-blue-600">CharityChain</h1>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-blue-600 rounded-lg"></div>
+            <h1 className="text-2xl font-bold text-gray-900">CharityChain</h1>
+          </div>
           <div className="flex gap-4">
             <button
               onClick={() => setCurrentPage('about')}
-              className="px-4 py-2 text-gray-700 hover:text-blue-600 transition"
+              className="px-6 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition font-medium"
             >
-              About
+              About Us
             </button>
             <button
               onClick={() => setCurrentPage('login')}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              className="px-6 py-2 bg-teal-700 text-white rounded-lg hover:bg-teal-800 transition font-medium"
             >
-              Get Started
+              Join Us
             </button>
           </div>
         </div>
-      </nav>
+      </header>
 
-      {/* Hero Section */}
-      <div className="bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800 text-white">
-        <div className="max-w-7xl mx-auto px-4 py-24">
-          <div className="max-w-3xl">
-            <h5 className="text-5xl md:text-6xl font-bold mb-6 leading-tight"> <center>
-              Transparent Charity Through Blockchain
-            </center>
-              
-            </h5>
-            <p className="text-xl md:text-2xl text-blue-100 mb-8 leading-relaxed">
-              Every donation tracked. Every impact verified. Trust restored through technology.
+      {/* Main Content */}
+      <main className="flex-1">
+        <div className="hero-card">
+          {/* Hero Card */}
+          <div className="bg-gradient-to-r from-teal-600 to-blue-800 rounded-3xl p-16 text-center text-white mb-12 shadow-2xl">
+            <h2 className="text-5xl font-bold mb-6">Welcome to CharityChain</h2>
+            <p className="text-2xl mb-12 text-blue-100">
+              Transparent blockchain donations connecting donors with verified NGOs
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button
-                onClick={() => setCurrentPage('login')}
-                className="px-8 py-4 bg-white text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition text-lg shadow-lg"
-              >
-                Start Donating
-              </button>
-              <button
-                onClick={() => setCurrentPage('about')}
-                className="px-8 py-4 bg-blue-500 bg-opacity-30 backdrop-blur-sm text-white rounded-lg font-medium hover:bg-opacity-40 transition text-lg border-2 border-white border-opacity-20"
-              >
-                Learn More
-              </button>
             </div>
-          </div>
+            <div className="hero-buttons">
+  <button
+    onClick={() => setCurrentPage('login')}
+    className="hero-btn-primary"
+  >
+    Login
+  </button>
+
+  <button
+    onClick={() => setCurrentPage('login')}
+    className="hero-btn-outline"
+  >
+    Register
+  </button>
+</div> </div>
+</main>
+
+          {/* Stats Grid */}
+          {loading ? (
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto"></div>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-4 gap-6 mb-12">
+              <div className="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-lg transition">
+                <div className="text-4xl font-bold text-teal-600 mb-2">
+                  {stats.totalDonated.toFixed(1)} ETH
+                </div>
+                <div className="text-gray-600 text-lg">Donated</div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-lg transition">
+                <div className="text-4xl font-bold text-teal-600 mb-2">
+                  {stats.activeCampaigns}+
+                </div>
+                <div className="text-gray-600 text-lg">Campaigns</div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-lg transition">
+                <div className="text-4xl font-bold text-teal-600 mb-2">
+                  {stats.totalDonors}+
+                </div>
+                <div className="text-gray-600 text-lg">Donors</div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-lg transition">
+                <div className="text-4xl font-bold text-teal-600 mb-2">
+                  {stats.verifiedNGOs}+
+                </div>
+                <div className="text-gray-600 text-lg">NGOs</div>
+              </div>
+            </div>
+          )}
         </div>
-      </div>
-
-      {/* Stats Section */}
-      <div className="bg-gray-50 py-16">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-4xl font-bold text-blue-600 mb-2">0.0 ETH</div>
-              <div className="text-gray-600">Donated</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-blue-600 mb-2">3+</div>
-              <div className="text-gray-600">Active Campaigns</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-blue-600 mb-2">1+</div>
-              <div className="text-gray-600">Verified NGOs</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-blue-600 mb-2">2+</div>
-              <div className="text-gray-600">Donors</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Features Section */}
-      <div className="py-20">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h3 className="text-4xl font-bold text-gray-900 mb-4">
-              Why Choose CharityChain?
-            </h3>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Blockchain technology meets traditional charitable giving
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-10">
-            <div className="text-center">
-              <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg className="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
-              </div>
-              <h4 className="text-2xl font-bold text-gray-900 mb-3">100% Transparent</h4>
-              <p className="text-gray-600 leading-relaxed">
-                Every donation is recorded on the blockchain. Track your contribution from wallet to impact with complete visibility.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-              </div>
-              <h4 className="text-2xl font-bold text-gray-900 mb-3">Secure & Verified</h4>
-              <p className="text-gray-600 leading-relaxed">
-                All NGOs are thoroughly vetted. Blockchain technology ensures your donations cannot be altered or misused.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg className="w-10 h-10 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <h4 className="text-2xl font-bold text-gray-900 mb-3">Real-Time Impact</h4>
-              <p className="text-gray-600 leading-relaxed">
-                See immediate updates from NGOs. Watch your donation make a difference with progress reports and blockchain verification.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* How It Works */}
-      <div className="bg-gray-50 py-20">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h3 className="text-4xl font-bold text-gray-900 mb-4">How It Works</h3>
-            <p className="text-xl text-gray-600">Simple, transparent, and impactful</p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-xl shadow-md">
-              <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-2xl mb-6">
-                1
-              </div>
-              <h4 className="text-xl font-bold text-gray-900 mb-3">Choose a Cause</h4>
-              <p className="text-gray-600">
-                Browse verified campaigns across education, healthcare, environment, and more. Find a cause that resonates with you.
-              </p>
-            </div>
-
-            <div className="bg-white p-8 rounded-xl shadow-md">
-              <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-2xl mb-6">
-                2
-              </div>
-              <h4 className="text-xl font-bold text-gray-900 mb-3">Make Your Donation</h4>
-              <p className="text-gray-600">
-                Contribute any amount securely. Your transaction is instantly recorded on the blockchain for complete transparency.
-              </p>
-            </div>
-
-            <div className="bg-white p-8 rounded-xl shadow-md">
-              <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-2xl mb-6">
-                3
-              </div>
-              <h4 className="text-xl font-bold text-gray-900 mb-3">Track Your Impact</h4>
-              <p className="text-gray-600">
-                Receive real-time updates on how your donation is being used. View blockchain records and progress reports anytime.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* CTA Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 py-20">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h3 className="text-4xl font-bold text-white mb-6">
-            Ready to Make a Difference?
-          </h3>
-          <p className="text-xl text-blue-100 mb-8">
-            Join us on CharityChain
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              onClick={() => setCurrentPage('login')}
-              className="px-8 py-4 bg-white text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition text-lg shadow-lg"
-            >
-              Start Donating Today
-            </button>
-            <button
-              onClick={() => setCurrentPage('login')}
-              className="px-8 py-4 bg-blue-500 bg-opacity-30 backdrop-blur-sm text-white rounded-lg font-medium hover:bg-opacity-40 transition text-lg border-2 border-white border-opacity-20"
-            >
-              Register as NGO
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Testimonials */}
-      <div className="py-20">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h3 className="text-4xl font-bold text-gray-900 mb-4">0+</h3>
-            <p className="text-xl text-gray-600">Lives impacted so far</p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-xl shadow-md border border-gray-100">
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-              <p className="text-gray-700 mb-4">
-                Contribute for a cause of your choice 
-              </p>
-              <div className="font-medium text-gray-900">Clean water initative</div>
-              <div className="text-sm text-gray-600">ABC</div>
-            </div>
-
-            <div className="bg-white p-8 rounded-xl shadow-md border border-gray-100">
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-              <p className="text-gray-700 mb-4">
-                Change lives: support someone's education today
-              </p>
-              <div className="font-medium text-gray-900">Education for the underprivileged</div>
-              <div className="text-sm text-gray-600">ABC</div>
-            </div>
-
-            <div className="bg-white p-8 rounded-xl shadow-md border border-gray-100">
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-              <p className="text-gray-700 mb-4">
-                Protect the voiceless
-              </p>
-              <div className="font-medium text-gray-900">Local Animal Shelter</div>
-              <div className="text-sm text-gray-600">ABC</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      
+        )
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h4 className="text-white font-bold text-lg mb-4">CharityChain</h4>
-              <p className="text-sm">
-                Transparent charity through blockchain technology. Building trust, one donation at a time.
-              </p>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Platform</h4>
-              <ul className="space-y-2 text-sm">
-                <li><button onClick={() => setCurrentPage('about')} className="hover:text-white transition">About Us</button></li>
-                <li><button onClick={() => setCurrentPage('login')} className="hover:text-white transition">Browse Campaigns</button></li>
-                <li><button onClick={() => setCurrentPage('login')} className="hover:text-white transition">Become a Donor</button></li>
-                <li><button onClick={() => setCurrentPage('login')} className="hover:text-white transition">Register NGO</button></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Resources</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white transition">How It Works</a></li>
-                <li><a href="#" className="hover:text-white transition">FAQ</a></li>
-                <li><a href="#" className="hover:text-white transition">Blockchain Guide</a></li>
-                <li><a href="#" className="hover:text-white transition">Support</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Legal</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white transition">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-white transition">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-white transition">Cookie Policy</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 pt-8 text-center text-sm">
-            <p>&copy; 2025 CharityChain. All rights reserved. Powered by blockchain technology.</p>
-          </div>
+      <footer className="bg-gray-800 text-gray-400 py-8 mt-auto">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <p className="text-lg">&copy; 2025 CharityChain. Built with blockchain</p>
         </div>
       </footer>
-    </div>
-  );
-}
+
+    }
